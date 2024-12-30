@@ -1,0 +1,58 @@
+package aryan;
+
+import java.sql.*;
+
+public class DecimalExample {
+    public static void main(String[] args) {
+        // Database connection details
+        String url = "jdbc:mysql://localhost:3306/your_database_name";
+        String user = "root";
+        String password = "root";
+
+        try (Connection con = DriverManager.getConnection(url, user, password)) {
+            System.out.println("Connected to the database successfully.");
+
+            // Create table
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS Products (" +
+                                      "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                                      "product_name VARCHAR(255) NOT NULL, " +
+                                      "price DECIMAL(10, 2) NOT NULL)";
+            try (Statement st = con.createStatement()) {
+                st.execute(createTableQuery);
+                System.out.println("Table created successfully.");
+            }
+
+            // Insert data
+            String insertQuery = "INSERT INTO Products (product_name, price) VALUES (?, ?)";
+            try (PreparedStatement pst = con.prepareStatement(insertQuery)) {
+                pst.setString(1, "Laptop");
+                pst.setBigDecimal(2, new java.math.BigDecimal("799.99"));
+                pst.executeUpdate();
+
+                pst.setString(1, "Smartphone");
+                pst.setBigDecimal(2, new java.math.BigDecimal("499.50"));
+                pst.executeUpdate();
+
+                pst.setString(1, "Tablet");
+                pst.setBigDecimal(2, new java.math.BigDecimal("299.99"));
+                pst.executeUpdate();
+
+                System.out.println("Data inserted successfully.");
+            }
+
+            // Retrieve and display data
+            String selectQuery = "SELECT * FROM Products";
+            try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(selectQuery)) {
+                while (rs.next()) {
+                    System.out.println("ID: " + rs.getInt("id"));
+                    System.out.println("Product Name: " + rs.getString("product_name"));
+                    System.out.println("Price: " + rs.getBigDecimal("price"));
+                    System.out.println("----------------------------");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
+        }
+    }
+}
