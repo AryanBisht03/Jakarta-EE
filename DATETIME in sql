@@ -1,0 +1,56 @@
+package aryan;
+
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class DateTimeExample {
+    public static void main(String[] args) {
+        // Database connection details
+        String url = "jdbc:mysql://localhost:3306/your_database_name";
+        String user = "root";
+        String password = "root";
+
+        try (Connection con = DriverManager.getConnection(url, user, password)) {
+            System.out.println("Connected to the database successfully.");
+
+            // Create table
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS Events (" +
+                                      "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                                      "event_name VARCHAR(255) NOT NULL, " +
+                                      "event_time DATETIME NOT NULL)";
+            try (Statement st = con.createStatement()) {
+                st.execute(createTableQuery);
+                System.out.println("Table created successfully.");
+            }
+
+            // Insert data
+            String insertQuery = "INSERT INTO Events (event_name, event_time) VALUES (?, ?)";
+            try (PreparedStatement pst = con.prepareStatement(insertQuery)) {
+                pst.setString(1, "New Year Party");
+                pst.setTimestamp(2, Timestamp.valueOf("2024-12-31 20:00:00"));
+                pst.executeUpdate();
+
+                pst.setString(1, "Team Meeting");
+                pst.setTimestamp(2, Timestamp.valueOf("2024-12-29 10:30:00"));
+                pst.executeUpdate();
+
+                System.out.println("Data inserted successfully.");
+            }
+
+            // Retrieve and display data
+            String selectQuery = "SELECT * FROM Events";
+            try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(selectQuery)) {
+                while (rs.next()) {
+                    System.out.println("ID: " + rs.getInt("id"));
+                    System.out.println("Event Name: " + rs.getString("event_name"));
+                    System.out.println("Event Time: " + rs.getTimestamp("event_time"));
+                    System.out.println("----------------------------");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
+        }
+    }
+}
