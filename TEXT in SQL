@@ -1,0 +1,49 @@
+package aryan;
+
+import java.sql.*;
+
+public class LargeTextExample {
+    public static void main(String[] args) {
+        // Database connection details
+        String url = "jdbc:mysql://localhost:3306/your_database_name";
+        String user = "root";
+        String password = "root";
+
+        try (Connection con = DriverManager.getConnection(url, user, password)) {
+            System.out.println("Connected to the database successfully.");
+
+            // Create table (if not exists)
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS Articles (" +
+                                      "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                                      "title VARCHAR(255) NOT NULL, " +
+                                      "content TEXT)";
+            try (Statement st = con.createStatement()) {
+                st.execute(createTableQuery);
+                System.out.println("Table created successfully.");
+            }
+
+            // Insert large text
+            String insertQuery = "INSERT INTO Articles (title, content) VALUES (?, ?)";
+            try (PreparedStatement pst = con.prepareStatement(insertQuery)) {
+                pst.setString(1, "Introduction to SQL");
+                pst.setString(2, "SQL stands for Structured Query Language. It is used to interact with databases...");
+                pst.executeUpdate();
+                System.out.println("Large text inserted successfully.");
+            }
+
+            // Retrieve and display data
+            String selectQuery = "SELECT * FROM Articles";
+            try (Statement st = con.createStatement(); ResultSet rs = st.executeQuery(selectQuery)) {
+                while (rs.next()) {
+                    System.out.println("ID: " + rs.getInt("id"));
+                    System.out.println("Title: " + rs.getString("title"));
+                    System.out.println("Content: " + rs.getString("content"));
+                    System.out.println("----------------------------");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
+        }
+    }
+}
