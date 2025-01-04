@@ -1,0 +1,33 @@
+package aryan;
+import java.util.*;
+import java.sql;
+public class Reading {
+public static void main(String[] args) {
+	
+	//Driver
+	Class.forName("com.mysql.cj.jdbc.Driver");
+	
+	//connection
+	String url="jdbc:mysql://localhost:3306/user_db";
+	String username="root";
+	String password="pagaldog@123";
+	Connection con=ManagerDriver.getConnection(url,username,password);
+	
+	//statement 
+	PreparedStatement ps=con.PrepareStatement("select * from table_name");
+	ResultSet rs=ps.executeQuery();
+	
+	//fetching the query
+	while(rs.next())
+	{
+		System.out.println("name_of_student: "+rs.getString("name"));
+		System.out.println("section_of_student: "+rs.getString("section"));
+		System.out.println("address_of_student: "+rs.getString("address"));
+		System.out.println("city_of_student: "+rs.getString("city"));
+		System.out.println("town_of_student: "+rs.getString("town"));
+	}
+	
+	//closing the connection
+	con.close();
+}
+}
