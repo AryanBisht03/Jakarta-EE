@@ -1,0 +1,32 @@
+package aryan;
+import java.util.*;
+import java.sql.*;
+public class DELETEING {
+public static void main(String[] args) {
+	Scanner scanner=new Scanner(System.in);
+	//driver
+	Class.forName("com.mysql.cj.jdbc.Driver");
+	
+	//connection
+	String url="jdbc:mysql://localhost:3306/user_db";
+	String username="root";
+	String password="pagaldog@123";
+	Connection con=ManagerDriver.getConnection(url,username,password);
+	
+	//statement creation
+	String name=scanner.nextLine();
+	String email=scanner.nextLine();
+	PreparedStatement ps=con.PrepareStatement("update table_name set name=? where email=?");
+	ps.SetString(1,name);
+	ps.SetString(2,email);
+	//updating the statement or storing it
+	int x=ps.executeUpdate();
+	if(x>0)
+		System.out.println("Succesfully updated");
+	else
+		System.out.println("Error in updating");
+	
+	//closing the connection;
+	con.close();
+}
+}
