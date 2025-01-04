@@ -1,0 +1,134 @@
+package aryan;
+import java.util.*;
+import java.sql.*;
+public class New_abs {
+public static void main(String[] args) throws Exception {
+	Scanner scanner=new Scanner(System.in);
+	int call=1;
+	do
+	{
+		
+	// establishing a driver
+	System.out.println("Select the Driver you want and remember to add the JAR file");
+	System.out.println("1.MYSQL");
+	System.out.println("2.Oracle Database");
+	System.out.println("3.PostgreSQL");
+	System.out.println("4.Microsoft SQL Server");
+	System.out.println("5.SQLite");
+	System.out.println("6.DB2 (IBM)");
+	System.out.println("7.MariaDB");
+	System.out.println("8.Sybase");
+	System.out.println("9.H2 Database");
+   
+	int choice=scanner.nextInt();
+	switch(choice)
+	{
+	case 1:
+		String s1="com.mysql.cj.jdbc.Driver";
+		Class.forName(s1);
+		break;
+	
+	case 2:
+		String s2="jdbc:oracle:thin:@localhost:1521:xe";
+		Class.forName(s2);
+		break;
+	
+	case 3:
+		String s3="jdbc:postgresql://localhost:5432/mydatabase";
+		Class.forName(s3);
+		break;
+	
+	case 4:
+		String s4="jdbc:sqlserver://localhost:1433;databaseName=mydatabase";
+		Class.forName(s4);
+		break;
+	
+	case 5:
+		String s5="jdbc:sqlite:mydatabase.db";
+		Class.forName(s5);
+		break;
+	
+	case 6:
+		String s6="jdbc:db2://localhost:50000/mydatabase";
+		Class.forName(s6);
+		break;
+	
+	case 7:
+		String s7="jdbc:mariadb://localhost:3306/mydatabase";
+		Class.forName(s7);
+		break;
+	
+	case 8:
+		String s8="jdbc:sybase:Tds:localhost:5000/mydatabase";
+		Class.forName(s8);
+		break;
+	
+	case 9:
+		String s9="jdbc:h2:~/mydatabase";
+		Class.forName(s9);
+		break;
+	
+	default:
+		System.out.println("Not a valid Choice");
+	}
+	
+	
+	System.out.println("Driver established Succesfully!!");
+	
+	// establishing a connection
+	System.out.println("Please enter URL for the connection");
+	String url=scanner.nextLine();
+	System.out.println("Please enter user_name");
+	String user_name;
+	System.out.println("Please enter password");
+	String password;
+    Connection con=DriverManager.getConnection(url,user_name,password);
+    System.out.println("Connection established Successfully");
+    
+    // creating a statement
+    System.out.println("PLEASE ENTER THE NUMBER OF ROWS YOU WANTED");
+    int rows=scanner.nextInt();
+    for(int i=0;i<rows;i++)
+    {
+    	System.out.println("Please enter name");
+        String name=scanner.nextLine();
+        System.out.println("Please enter email");
+        String email=scanner.nextLine();
+        System.out.println("Please enter Password");
+        String password=scanner.nextLine();
+        System.out.println("Please enter your gender");
+        String sex=scanner.nextLine();
+        System.out.println("Please enter your city name");
+        String city=scanner.nextLine();
+        PreparedStatement ps=con.PrepareStatement("insert into table_name(name,email,password,sex,city)values(?,?,?,?,?)");
+        ps.SetString(1,name);
+        ps.SetString(2,email);
+        ps.SetString(3,password);
+        ps.SetString(4,sex);
+        ps.SetString(5,city);
+        
+        //storing the data
+        int x=ps.executeUpdate();
+        if(x>0)
+        {
+        	System.out.println("Successfully updated and stored the values!!");
+        }
+        else
+        {
+        	System.out.println("Error in updating and storing the data!!");
+        }
+    }
+    
+  
+    
+    //closing the prepared query
+    ps.close();
+    
+    //closing the connection;
+    con.close();
+    
+    System.out.println("DO you want it again? press 1 for new and 0 for exiting");
+    call=scanner.nextInt();
+	}while(call);
+}
+}
