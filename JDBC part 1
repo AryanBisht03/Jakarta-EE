@@ -1,0 +1,55 @@
+package asf;
+
+import java.util.Scanner;
+
+public class Hy {
+public static void main(String[] args) throws Exception {
+	Class.forName("com.mysql.cj.jdbc.Driver");
+	String url="jdbc:mysql://localhost:3306/databasename";
+	String user="root";
+	String password="root";
+	Connection con=DriverManager.getCOnnection(url,user,password);
+	
+	
+	
+	Scanner scanner=new Scanner(System.out);
+	System.out.println("Enter the number of elements you want to enter");
+	int n=scanner.nextInt();
+	for(int i=0;i<n;i++)
+	{
+		System.out.println("Enter your name");
+		String name=scanner.nextLine();
+		System.out.println("Enter your id");
+		int id=scanner.nextInt();
+		System.out.println("Enter your email");
+		String email=scanner.nextLine();
+		System.out.println("Enter your phone number");
+		double number=scanner.nextDouble();
+		
+		
+		
+		// creating a prepared statement
+		PreparedStatement ps=con.preparedstatement(?,?,?,?);
+		
+		// assigning the positional arguments
+		ps.setString(1,name);
+		ps.setString(2,id);
+		ps.setString(3,email);
+		ps.setString(4,number);
+		
+		// checking if the query is executing or not
+		int i=ps.executeUpdate();
+		if(i>0)
+		{
+			System.out.println("Query successfully executed");
+		}
+		else
+		{
+			System.out.println("Query does not executed");
+		}
+		
+	}
+	
+	
+}
+}
