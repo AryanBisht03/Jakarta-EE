@@ -1,0 +1,76 @@
+package updated;
+
+import java.util.Scanner;
+
+public class CrudsOperationsusingJDBC {
+public static void main(String[] args) throws Exception{
+// loading and registering the driver
+	Class.forName("com.mysql.cj.jdbc.Driver");
+	
+	// creating the connection
+	String url="jdbc:mysql://localhost:3306/mydb";
+	String user="root";
+	String password="root";
+	Connection con=DriverManager.getConnection(url,user,password);
+	
+	//the insert query
+	Scanner scanner=new Scanner(System.in);
+	System.out.println("Enter the number of queries you wanted to insert");
+	int n=scanner.nextInt();
+	for(int i=0;i<n;i++)
+	{
+	   System.out.println("Enter name");
+	   String name=scanner.nextLine();
+	   System.out.println("Enter id");
+	   int id=scanner.nextInt();
+	   System.out.println("Enter email");
+	   String email=scanner.nextLine();
+	   System.out.println("Enter password");
+	   String password=scanner.nextLine();
+	   System.out.println("Enter number");
+	   double number=scanner.nextDouble();
+	   
+	   PreparedStatement ps=con.preparestatement("insert into table_name values(?,?,?,?,?)");
+	   ps.setString(1,name);
+	   ps.setString(2,id);
+	   ps.setString(3,email);
+	   ps.setString(4,password);
+	   ps.setString(5,number);
+	   
+	   int i=ps.executeUpdate();
+	   if(i>0)
+	   {
+		   System.out.println("Query executed successfully");
+	   }
+	   else
+	   {
+		   System.out.println("Query not executed successfully");
+	   }
+	}
+	
+	
+	System.out.println("Enter the email who you wanted to update");
+	String email=scanner.nextLine();
+	System.out.println("Enter the id");
+	int id=scanner.nextInt();
+	//updating query from the table
+	PreparedStatement ps=con.preparestatement("update table_name set email=? where id=?");
+	ps.setString(1,email);
+	ps.setString(2,id);
+	int i=ps.executeUpdate();
+	
+	//deleting from the table
+	String name=scanner.nextLine();
+	PreparedStatement ps=con.preparedstatement("delete from table_name where name = ?");
+	ps.setString(1,name);
+	
+	
+	//fetching from the table
+	PreparedSattement ps=con.preparedstatement("select * from tableneme");
+	ResultSet rs=ps.executeQuery();
+	while(rs.next())
+	{
+		System.out.println(rs.getString("name")+rs.getString("id")+rs.getString("email")+rs.getString("number")+rs.getString("password"));
+	}	con.close();
+}
+}
